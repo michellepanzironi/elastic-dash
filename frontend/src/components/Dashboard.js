@@ -1,17 +1,33 @@
-import React from 'react';
-// import axios from 'axios';
+import React, { useCallback, useEffect } from 'react';
 import { useLocalStorageState } from '../hooks/useLocalStorageState';
 
 const Dashboard = () => {
-	const [data, setData] = useLocalStorageState('fetchData', {})
-	// axios.get()
+	const [data, setData] = useLocalStorageState('fetchData', null)
+	
+	const getSampleData = useCallback(async (controller) => {
+		const response = await fetch(
+			`${process.env.REACT_APP_API_URL}/proxy`,
+			{ signal: controller.signal }
+		);
+		const results = await response.json()
+		console.log('results', results)
 
+		setData(results)
+	}, [setData])
 
-	console.log(`${process.env.REACT_APP_API_URL}/kibana_sample_data_logs/_search`);
+	useEffect(() => {
+		const controller = new AbortController();
+		if (Object.keys(data).length === 0) getSampleData(controller);
+		return () => {
+			controller.abort()
+		}
+		console.log('data', data)
+	}, [data, getSampleData])
+
 
 	return (
 		<div>
-			hello charle
+			hello charles
 		</div>
 	)
 };
