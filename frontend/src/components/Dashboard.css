@@ -1,0 +1,8 @@
+.flex {
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.dashboard div {
+	/* border: 1px solid pink; */
+}

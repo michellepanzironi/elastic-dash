@@ -1,5 +1,17 @@
 import React, { useCallback, useEffect } from 'react';
+import Table from './Table';
+// import { 
+// 	BarChart, 
+// 	ResponsiveContainer, 
+// 	CartesianGrid,
+// 	XAxis,
+// 	YAxis,
+// 	Tooltip,
+// 	Legend,
+// 	Bar,
+// } from 'recharts';
 import { useLocalStorageState } from '../hooks/useLocalStorageState';
+import './Dashboard.css'
 
 const Dashboard = () => {
 	const [data, setData] = useLocalStorageState('fetchData', null)
@@ -17,19 +29,41 @@ const Dashboard = () => {
 
 	useEffect(() => {
 		const controller = new AbortController();
-		if (Object.keys(data).length === 0) getSampleData(controller);
+		if (!data) getSampleData(controller);
 		return () => {
 			controller.abort()
 		}
-		console.log('data', data)
 	}, [data, getSampleData])
 
 
 	return (
-		<div>
-			hello charles
+		<div className='dashboard'>
+
+			<div className='flex'>
+				<div>date range picker</div>
+				<div>refresh</div>
+			</div>
+
+			<div>hits</div>
+			<div className='flex'>
+				<div>date range</div>
+				<div>hourly</div>
+			</div>
+
+			<div>chart</div>
+
+			<Table data={data.hits.hits} />
+
 		</div>
 	)
 };
+
+// _source: {
+// 	timestamp: "2022-01-02T00:00:00Z",
+// 	clientip: "5.6.7.8",
+// 	geo: { srcdest: "CA" },
+// 	request: "GET /about",
+// 	response: 200,
+// },
 
 export default Dashboard;
