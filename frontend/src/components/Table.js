@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 
 const Table = ({ data }) => {
-	const rows = data.map(hit => {
-		const { timestamp, ip, geo, request, response } = hit._source
-		const ts = new Date(timestamp).toString().slice(3, 24)
-		return {
-			id: hit._id,
-			timestamp: ts, 
-			clientip: ip,
-			geo: geo.srcdest,
-			request: request,
-			response: response,
-		}
-	})
+	const rows = useMemo(() => 
+		data.map(hit => {
+			const { timestamp, ip, geo, request, response } = hit._source
+			const ts = new Date(timestamp).toString().slice(3, 24)
+			return {
+				id: hit._id,
+				timestamp: ts, 
+				clientip: ip,
+				geo: geo.srcdest,
+				request: request,
+				response: response,
+			}
+		}),
+		[data]
+	)
 
 	return (
 		<Box sx={{ height: 400, width: '100%' }}>
