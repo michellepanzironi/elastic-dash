@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import Table from './Table';
+import Button from '@mui/material/Button';
+import RefreshIcon from '@mui/icons-material/Refresh';
 // import { 
 // 	BarChart, 
 // 	ResponsiveContainer, 
@@ -11,25 +12,26 @@ import Table from './Table';
 // 	Bar,
 // } from 'recharts';
 import { useLocalStorageState } from '../hooks/useLocalStorageState';
+import Table from './Table';
+import Chart from './Chart';
 import './Dashboard.css'
 
 const Dashboard = () => {
-	const [data, setData] = useLocalStorageState('fetchData', null)
+	const [data, setData] = useLocalStorageState('fetchData', [])
 	
 	const getSampleData = useCallback(async (controller) => {
 		const response = await fetch(
 			`${process.env.REACT_APP_API_URL}/proxy`,
-			{ signal: controller.signal }
+			{ signal: controller?.signal }
 		);
 		const results = await response.json()
-		console.log('results', results)
 
-		setData(results)
-	}, [setData])
+		setData([...data, ...results.hits.hits])
+	}, [data, setData])
 
 	useEffect(() => {
 		const controller = new AbortController();
-		if (!data) getSampleData(controller);
+		if (data.length === 0) getSampleData(controller);
 		return () => {
 			controller.abort()
 		}
@@ -39,20 +41,20 @@ const Dashboard = () => {
 	return (
 		<div className='dashboard'>
 
-			<div className='flex'>
-				<div>date range picker</div>
-				<div>refresh</div>
-			</div>
-
-			<div>hits</div>
-			<div className='flex'>
+			<div className='flex chartButtons'>
 				<div>date range</div>
-				<div>hourly</div>
+				<Button onClick={() => getSampleData()} variant="contained" startIcon={<RefreshIcon />}>Refresh</Button>
 			</div>
 
-			<div>chart</div>
+			<div><b>{data.length}</b> Hits</div>
+			<div className='flex bold'>
+				<div>DATERANGESTART - DATERANGEEND</div>
+				<div>HOURLY</div>
+			</div>
 
-			<Table data={data.hits.hits} />
+			<Chart data={data} />
+
+			<Table data={data} />
 
 		</div>
 	)

@@ -1,8 +1,20 @@
 .flex {
 	display: flex;
-	justify-content: space-evenly;
+	justify-content: space-evenly
+} 
+
+.bold {
+	font-weight: 500;
 }
 
-.dashboard div {
-	/* border: 1px solid pink; */
+.dashboard > div {
+	padding: 16px 0;
+}
+
+.chartButtons {
+	justify-content: flex-end;
+}
+
+.chartButtons div {
+	padding: 0px 4px;
 }

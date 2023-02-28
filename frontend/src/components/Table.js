@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 const Table = ({ data }) => {
 	const rows = data.map(hit => {
 		const { timestamp, ip, geo, request, response } = hit._source
-		const ts = Date(timestamp).slice(3, 24)
+		const ts = new Date(timestamp).toString().slice(3, 24)
 		return {
 			id: hit._id,
 			timestamp: ts, 
@@ -16,7 +16,6 @@ const Table = ({ data }) => {
 		}
 	})
 
-	console.log(rows)
 	return (
 		<Box sx={{ height: 400, width: '100%' }}>
 			<DataGrid
