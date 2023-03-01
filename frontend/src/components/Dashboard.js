@@ -74,11 +74,7 @@ const Dashboard = () => {
 					/>
 					<DatePicker
 						selected={endDate}
-						onChange={date => {
-							const newDate = new Date(date);
-							newDate.setHours(23);
-							setEndDate(newDate);
-						}}
+						onChange={date => setEndDate(date)}
 						selectsEnd
 						startDate={startDate}
 						endDate={endDate}
