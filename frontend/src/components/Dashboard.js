@@ -91,7 +91,7 @@ const Dashboard = () => {
 				</Button>
 			</div>
 
-			<div><b>{data.length}</b> Hits</div>
+			<div><b>{dateRangedData.length}</b> Hits</div>
 			<div className='bold'>{startDate?.toString().slice(3, 24)}  -  {endDate?.toString().slice(3, 24)}</div>
 
 			<Chart data={dateRangedData} />
