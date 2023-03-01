@@ -4,6 +4,8 @@ This app uses ElasticSearchAPI, `rechart`, `@material-ui`, and `react-datepicker
 
 To run the app from the main directory run `docker-compose up -d`
 
+Then go to [http://localhost:5601/app/kibana#/home/tutorial_directory/sampleData?_g=()](http://localhost:5601/app/kibana#/home/tutorial_directory/sampleData?_g=()) and add the Sample Log Data.
+
 To run tests, run `npm test` inside the /frontend directory
 
 Runs the app in the development mode.\
