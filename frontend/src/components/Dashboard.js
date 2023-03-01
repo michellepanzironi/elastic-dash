@@ -11,9 +11,9 @@ import './Dashboard.css'
 
 const Dashboard = () => {
 	const [data, setData] = useLocalStorageState('fetchData', [])
-	const [startDate, setStartDate] = useState(new Date());
-	const [endDate, setEndDate] = useState(new Date());
 	const [dates, setDates] = useState([]);
+	const [startDate, setStartDate] = useState(null);
+	const [endDate, setEndDate] = useState(null);
 	
 	const getSampleData = useCallback(async (controller) => {
 		const response = await fetch(
@@ -22,15 +22,7 @@ const Dashboard = () => {
 		);
 		const results = await response.json()
 		await setData(results.hits.hits)		
-
-		// set default start/end for dateRange
-		const sortedDates = results.hits.hits.map(hit => new Date(hit._source.timestamp)).sort((a, b) => a - b)
-		setDates(sortedDates);
-		setStartDate(sortedDates[0]);
-		setEndDate(sortedDates[sortedDates.length - 1]);
 	}, [setData])
-
-	
 
 	useEffect(() => {
 		const controller = new AbortController();
@@ -41,26 +33,34 @@ const Dashboard = () => {
 		}
 	}, [data, getSampleData])
 
-	
-
-	// const dateRangedData = data.filter(hit => {
-	// 	const start = new Date(startDate?.getTime())
-	// 	const end = new Date(endDate?.getTime())
-	// 	// where timestamp is greater than startDate and lessthan endDate
-	// 	const hitDate = new Date(hit._source.timestamp)
-	// 	return hitDate >= start?.setUTCHours(23,59,59) && hitDate <= end?.setUTCHours(23,59,59)
-	// 	// d >= start && d <= end
-	// })
-	// // Mar 1 < Mar 10 === true
-	// console.log({ dateRangedData })
-	
-	// console.log(startDate)
-	// console.log(endDate)
-	
-		const resetDateRange = () => {
-			setStartDate(dates[0]);
-			setEndDate(dates[dates.length - 1]);
+	useEffect(() => {
+		if (data.length > 0 && !startDate && !endDate) {
+			// set default start/end for dateRange
+			const sortedDates = data.map(hit => new Date(hit._source.timestamp)).sort((a, b) => a - b)
+			setDates(sortedDates);
+			setStartDate(sortedDates[0]);
+			setEndDate(sortedDates[sortedDates.length - 1]);
 		}
+	}, [data, startDate, endDate])
+
+	const dateRangedData = data.filter(hit => {
+		const start = new Date(startDate?.getTime()).toString().slice(0, 15)
+		const end = new Date(endDate?.getTime()).toString().slice(0, 15)
+		const hitDate = new Date(hit._source.timestamp).toString().slice(0, 15)
+		
+		if (start === end) {
+			return hitDate === start
+		}
+
+		return new Date(hitDate) >= new Date(start) && new Date(hitDate) <= new Date(end)
+	})
+	console.log({ dateRangedData })
+	
+	
+	const resetDateRange = () => {
+		setStartDate(dates[0]);
+		setEndDate(dates[dates.length - 1]);
+	}
 
 	return (
 		<div className='dashboard'>
@@ -72,14 +72,19 @@ const Dashboard = () => {
 						onChange={date => setStartDate(date)}
 						selectsStart
 						startDate={startDate}
+						endDate={endDate}
 					/>
 					<DatePicker
 						selected={endDate}
+						onChange={date => {
+							const newDate = new Date(date);
+							newDate.setHours(23);
+							setEndDate(newDate);
+						}}
 						selectsEnd
 						startDate={startDate}
 						endDate={endDate}
 						minDate={startDate}
-						onChange={date => setEndDate(date)}
 					/>
 				</div>
 				<Button onClick={resetDateRange} variant="contained" startIcon={<RefreshIcon />}>Refresh</Button>
