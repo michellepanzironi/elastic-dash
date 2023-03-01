@@ -53,9 +53,7 @@ const Dashboard = () => {
 		}
 
 		return new Date(hitDate) >= new Date(start) && new Date(hitDate) <= new Date(end)
-	})
-	console.log({ dateRangedData })
-	
+	})	
 	
 	const resetDateRange = () => {
 		setStartDate(dates[0]);
@@ -87,14 +85,21 @@ const Dashboard = () => {
 						minDate={startDate}
 					/>
 				</div>
-				<Button onClick={resetDateRange} variant="contained" startIcon={<RefreshIcon />}>Refresh</Button>
+				<Button 
+					onClick={resetDateRange} 
+					variant="contained" 
+					startIcon={<RefreshIcon />}
+					disableElevation
+				>
+					Refresh
+				</Button>
 			</div>
 
 			<div><b>{data.length}</b> Hits</div>
 			<div className='bold'>{startDate?.toString().slice(3, 24)}  -  {endDate?.toString().slice(3, 24)}</div>
 
-			<Chart data={data} />
-			<Table data={data} />
+			<Chart data={dateRangedData} />
+			<Table data={dateRangedData} />
 
 		</div>
 	)
