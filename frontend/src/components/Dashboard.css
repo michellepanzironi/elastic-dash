@@ -22,3 +22,7 @@
 .dateRange {
 	margin: auto 0;
 }
+
+.tableHeader {
+	font-weight: 500;
+}

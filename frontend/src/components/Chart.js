@@ -56,7 +56,7 @@ const Chart = ({ data }) => {
 					<YAxis />
 					<Tooltip />
 					<Legend />
-					<Bar dataKey="count" fill="#82ca9d" />
+					<Bar dataKey="count" fill="#00b8bb" />
 				</BarChart>
 			</ResponsiveContainer>
 		</div>
