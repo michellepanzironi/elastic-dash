@@ -9,6 +9,6 @@ test('display the number of Hits', () => {
 
 test('should display a refresh button', () => {
 	render(<Dashboard />);
-	const element = screen.getByText('Refresh');
+	const element = screen.getByText('Reset');
 	expect(element).toBeInTheDocument();
 })

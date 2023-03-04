@@ -87,7 +87,7 @@ const Dashboard = () => {
 					startIcon={<RefreshIcon />}
 					disableElevation
 				>
-					Refresh
+					Reset
 				</Button>
 			</div>
 
